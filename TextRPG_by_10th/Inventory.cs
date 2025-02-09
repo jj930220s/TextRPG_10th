@@ -56,6 +56,8 @@ namespace TextRPG_by_10th
                 AddInventory(402, 1);
                 AddInventory(1001, 3);
                 AddInventory(1004, 3);
+                AddInventory(10001, 3);
+                AddInventory(10002, 3);
             }
         }
 

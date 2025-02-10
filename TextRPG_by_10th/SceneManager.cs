@@ -86,7 +86,6 @@ namespace TextRPG_by_10th
             // 퀘스트 테스트용 코드
             questManager.SetBasicQuest();
 
-            while (currentScene == Scene.Start)
             while (currentScene == Scene.Town)
             {
                 Console.Clear();

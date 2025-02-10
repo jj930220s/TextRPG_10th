@@ -9,6 +9,7 @@ namespace TextRPG_by_10th
     
     public class Inventory
     {
+
         private static bool isInitialized = false;           //최초 실행시 인벤토리에 기본아이템 추가.
 
         static List<Equipment> equipmentList = new List<Equipment>();
@@ -16,6 +17,7 @@ namespace TextRPG_by_10th
         static List<MiscItem> miscList = new List<MiscItem>();
 
         static Dictionary<string, bool> equippedItems = new Dictionary<string, bool>(); // 장착 상태 관리
+
         static Dictionary<string, string> equippedSlots = new Dictionary<string, string>()
         {
             {"머리", "-" },

@@ -14,6 +14,10 @@ namespace TextRPG_by_10th
 
         Shop shop;
 
+        Battle battle = new Battle();
+
+        Player player;
+
         public QuestManager questManager = new QuestManager();
 
         SceneManager()
@@ -63,6 +67,7 @@ namespace TextRPG_by_10th
                     break;
                 case Scene.Dungeon:
                     //던전 입장 및 몬스터와의 전투
+                    DungeonScene();
                     break;
                 case Scene.Quest:
                     //현재 진행중인 퀘스트 확인
@@ -72,7 +77,7 @@ namespace TextRPG_by_10th
         }
 
         //각 Scene에서 실행할 기능을 수행하는 함수
-        void StartScene()
+        void TownScene()
         {
             Console.WriteLine("게임 시작");
 
@@ -82,6 +87,7 @@ namespace TextRPG_by_10th
             questManager.SetBasicQuest();
 
             while (currentScene == Scene.Start)
+            while (currentScene == Scene.Town)
             {
                 Console.Clear();
                 Console.WriteLine("===== Sparta Dungeon =====");
@@ -89,6 +95,7 @@ namespace TextRPG_by_10th
                 Console.WriteLine("2. 인벤토리");
                 Console.WriteLine("3. 상점");
                 Console.WriteLine("4. 퀘스트");
+                Console.WriteLine("4. 던전");
                 Console.WriteLine("0. 나가기");
                 Console.Write(">> ");
                 string input = Console.ReadLine();
@@ -112,6 +119,9 @@ namespace TextRPG_by_10th
                         Console.WriteLine("퀘스트 실행");
                         currentScene = Scene.Quest;
                         break;
+                    case "4":
+                        currentScene = Scene.Dungeon;
+                        break;
                     case "0":
                         Console.WriteLine("게임을 종료합니다.");
                         return;
@@ -122,9 +132,55 @@ namespace TextRPG_by_10th
             }
         }
 
-        void TownScene()
+        void StartScene()
         {
-            Console.WriteLine("마을에 진입했다.");
+            while (currentScene == Scene.Start)
+            {
+                if (player == null)
+                    CreatPlayer();
+                else
+                    currentScene = Scene.Town;
+            }
+        }
+
+        void CreatPlayer()
+        {
+            Console.Clear();
+            Console.Write("이름을 입력하세요 : ");
+            string playerName = Console.ReadLine();
+
+            Console.WriteLine("직업을 선택하세요.");
+            Console.WriteLine("1. 전사");
+            Console.WriteLine("2. 도적");
+            Console.WriteLine("3. 궁수");
+
+            Console.Write(">> ");
+            string input = Console.ReadLine();
+
+            switch (input)
+            {
+                case "1":
+                    player = new Warrior(playerName, 100, 100, 10, 10, 0, 1, Job.전사);
+                    break;
+                case "2":
+                    player = new Assassin(playerName, 75, 75, 15, 7, 0, 1, Job.도적);
+                    break;
+                case "3":
+                    player = new Archer(playerName, 50, 50, 20, 5, 0, 1, Job.궁수);
+                    break;
+                default:
+                    Console.WriteLine("잘못된 입력입니다. 다시 입력하세요.");
+                    break;
+            }
+
+            if(player != null)
+            {
+                Console.WriteLine($"{player.playerJob.ToString()}을 선택했습니다.");
+                currentScene = Scene.Town;
+            }
+                
+
+            Thread.Sleep(1000);
         }
 
         void ShopScene()
@@ -135,6 +191,11 @@ namespace TextRPG_by_10th
         void InventoryScene()
         {
             inventory.ShowInventory();
+        }
+
+        void DungeonScene()
+        {
+            //battle.BattleProcess(player);
         }
 
         void QuestScene()

@@ -17,20 +17,19 @@ namespace TextRPG_by_10th
         {
             // 진행중인 모든 퀘스트 나열하기
             Console.Clear();
-            Console.WriteLine("===== 퀘스트 =====");
-            Console.WriteLine("현재 진행중인 퀘스트를 확인할 수 있습니다.\n");
+            Console.WriteLine("===== 장비 업그레이드 =====");
+            Console.WriteLine("현재 착용중인 장비를 업그레이드 할 수 있습니다.\n");
 
             foreach (var item in myQuest)
             {
                 ShowQuestDetail(item);
             }
 
-            Console.WriteLine("\n1. 퀘스트 관리");
             Console.WriteLine("0. 나가기");
             Console.Write(">> ");
             string input = Console.ReadLine();
 
-            if (input == "1")                       // 퀘스트관리
+            if (input == "1")                       // 대장간으로 이동?
             {
                 
             }
@@ -45,9 +44,7 @@ namespace TextRPG_by_10th
 
         private void ShowQuestDetail(Quest quest)
         {
-            int i = 1;
-
-            Console.WriteLine($"{i++}. {quest.name}\t클리어 : {CheckQuestClear(quest)}");
+            Console.WriteLine($" - {quest.name}\t {CheckQuestClear(quest)}");
 
             Console.WriteLine("퀘스트 클리어 조건 : ");
             foreach (var item in quest.miscItems)
@@ -72,21 +69,37 @@ namespace TextRPG_by_10th
             myQuest.Add(q);
         }
 
+        public void RefreshQuest()
+        {
+            myQuest.Clear();
+            List<Equipment> list = inven.GetEquipmentList();
+
+            foreach (var item in list)
+            {
+                int i = item.Id;
+                i += 99000;
+
+                AddQuest(i);
+            }
+
+        }
+
+
         // 저장기능 넣을거면 json으로 가져오는 내용으로 교체 필요
         public void SetBasicQuest()
         {
-            Quest quest1 = new Quest() { index = 1, name = "이름1", des = "설명1", canClear = false,
+            Quest quest1 = new Quest() { index = 99101, name = "초심자의 목검 업그레이드", des = "설명1", canClear = false,
             miscItems=new List<MiscItem>()};
 
             MiscItem item = MiscItem.GetMiscCatalog().First();
-            MiscItem item3 = MiscItem.GetMiscCatalog().ElementAt(2);
+            MiscItem item3 = MiscItem.GetMiscCatalog().ElementAt(1);
             item.Amount = 2;
             item3.Amount = 3;
             quest1.miscItems.Add(item);
             quest1.miscItems.Add(item3);
 
 
-            Quest quest2 = new Quest() { index = 2, name = "이름2", des = "설명2", canClear = false,
+            Quest quest2 = new Quest() { index = 99201, name = "널빤지 업그레이드", des = "설명2", canClear = false,
                 miscItems = new List<MiscItem>()};
         
 
@@ -94,20 +107,28 @@ namespace TextRPG_by_10th
             item2.Amount = 7;
             quest2.miscItems.Add(item2);
 
-            Quest quest3 = new Quest() { index = 3, name = "이름3", des = "설명3", canClear = false };
+            Quest quest3 = new Quest() { index = 99401, name = "천 옷 업그레이드", des = "설명3", canClear = false,
+            miscItems=new List<MiscItem>()};
+            MiscItem item4 = MiscItem.GetMiscCatalog().LastOrDefault();
+            item4.Amount = 1;
+            quest3.miscItems.Add(item4);
+
+
+
             allQuest.Add(quest1);
             allQuest.Add(quest2);
             allQuest.Add(quest3);
 
 
-            // 보유 퀘스트 확인용 코드
-            AddQuest(1);
-            AddQuest(2);
+            //// 보유 퀘스트 확인용 코드
+            //AddQuest(1);
+            //AddQuest(2);
 
             inven = SceneManager.instance.inventory;
+            RefreshQuest();
         }
         
-        private bool CheckQuestClear(Quest q)
+        private string CheckQuestClear(Quest q)
         {
             List<MiscItem> list = q.miscItems;
 
@@ -121,10 +142,10 @@ namespace TextRPG_by_10th
                 }
                 else
                 {
-                    return false;
+                    return "재료 부족";
                 }
             }
-            return true;
+            return "업그레이드 가능";
         }
 
     }
@@ -143,5 +164,10 @@ namespace TextRPG_by_10th
         // 임시 퀘스트클리어조건
         public List<MiscItem> miscItems { get; set; }
 
+        // 기반 아이템
+        public Equipment equipment { get; set; }
+
+        // 소모 골드
+        public int gold {  get; set; }
     }
 }

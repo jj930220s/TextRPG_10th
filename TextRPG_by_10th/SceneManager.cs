@@ -93,8 +93,8 @@ namespace TextRPG_by_10th
                 Console.WriteLine("1. 상태 보기");
                 Console.WriteLine("2. 인벤토리");
                 Console.WriteLine("3. 상점");
-                Console.WriteLine("4. 퀘스트");
                 Console.WriteLine("4. 던전");
+                Console.WriteLine("5. 장비 업그레이드");
                 Console.WriteLine("0. 나가기");
                 Console.Write(">> ");
                 string input = Console.ReadLine();
@@ -115,11 +115,11 @@ namespace TextRPG_by_10th
                         currentScene = Scene.Shop;
                         break;
                     case "4":
+                        currentScene = Scene.Dungeon;
+                        break;
+                    case "5":
                         Console.WriteLine("퀘스트 실행");
                         currentScene = Scene.Quest;
-                        break;
-                    case "4":
-                        currentScene = Scene.Dungeon;
                         break;
                     case "0":
                         Console.WriteLine("게임을 종료합니다.");
